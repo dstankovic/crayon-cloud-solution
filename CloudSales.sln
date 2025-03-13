@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudSales.Infrastructure", "CloudSales.Infrastructure\CloudSales.Infrastructure.csproj", "{8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudSales.Domain", "CloudSales.Domain\CloudSales.Domain.csproj", "{F92AACDB-B79D-4EA2-98CF-1034D15F6A6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudSales.Application", "CloudSales.Application\CloudSales.Application.csproj", "{07216334-F912-41B0-A5D3-BD317413927C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudSales.Tests", "CloudSales.Tests\CloudSales.Tests.csproj", "{C3BD21D4-2112-442F-88BC-341232EAB1CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudSales.Api", "CloudSales.Api\CloudSales.Api.csproj", "{A5167EAE-0B7C-4E22-A888-2A867A025399}"
+	ProjectSection(ProjectDependencies) = postProject
+		{07216334-F912-41B0-A5D3-BD317413927C} = {07216334-F912-41B0-A5D3-BD317413927C}
+		{8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE} = {8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE}
+		{F92AACDB-B79D-4EA2-98CF-1034D15F6A6A} = {F92AACDB-B79D-4EA2-98CF-1034D15F6A6A}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E3F81A8-2D0C-49C0-AE15-A347E3CC96DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92AACDB-B79D-4EA2-98CF-1034D15F6A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92AACDB-B79D-4EA2-98CF-1034D15F6A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92AACDB-B79D-4EA2-98CF-1034D15F6A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92AACDB-B79D-4EA2-98CF-1034D15F6A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07216334-F912-41B0-A5D3-BD317413927C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07216334-F912-41B0-A5D3-BD317413927C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07216334-F912-41B0-A5D3-BD317413927C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07216334-F912-41B0-A5D3-BD317413927C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3BD21D4-2112-442F-88BC-341232EAB1CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3BD21D4-2112-442F-88BC-341232EAB1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3BD21D4-2112-442F-88BC-341232EAB1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3BD21D4-2112-442F-88BC-341232EAB1CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5167EAE-0B7C-4E22-A888-2A867A025399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5167EAE-0B7C-4E22-A888-2A867A025399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5167EAE-0B7C-4E22-A888-2A867A025399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5167EAE-0B7C-4E22-A888-2A867A025399}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED0B291C-B11C-4804-B4DE-39899755CA13}
+	EndGlobalSection
+EndGlobal
