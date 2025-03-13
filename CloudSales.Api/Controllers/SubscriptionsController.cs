@@ -19,6 +19,5 @@ namespace CloudSales.Api.Controllers
 
             return Created();
         }
-
     }
 }

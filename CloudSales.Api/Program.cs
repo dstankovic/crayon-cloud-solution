@@ -1,7 +1,9 @@
+using CloudSales.Api.Middlewares;
 using CloudSales.Api.Validators;
 using CloudSales.Infrastructure.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace CloudSales.Api;
 
@@ -17,6 +19,8 @@ public class Program
         builder.Services.AddInfrastructure(configuration);
         builder.Services.AddApplication(configuration);
 
+        builder.Services.TryAddSingleton<ErrorFactory>();
+
         builder.Services.AddControllers();
 
         builder.Services
@@ -25,12 +29,13 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
         // Configure the HTTP request pipeline.
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
