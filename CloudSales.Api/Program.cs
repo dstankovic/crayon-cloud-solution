@@ -1,4 +1,7 @@
+using CloudSales.Api.Validators;
 using CloudSales.Infrastructure.Extensions;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace CloudSales.Api;
 
@@ -15,6 +18,10 @@ public class Program
         builder.Services.AddApplication(configuration);
 
         builder.Services.AddControllers();
+
+        builder.Services
+            .AddValidatorsFromAssemblyContaining<CreateSubscriptionRequestModelValidator>()
+            .AddFluentValidationAutoValidation();
 
         var app = builder.Build();
 

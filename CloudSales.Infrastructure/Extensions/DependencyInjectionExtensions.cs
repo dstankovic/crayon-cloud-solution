@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using CloudSales.Application.Interfaces;
+using CloudSales.Infrastructure.Services;
 
 namespace CloudSales.Infrastructure.Extensions;
 public static class DependencyInjectionExtensions
@@ -17,6 +18,7 @@ public static class DependencyInjectionExtensions
         services.TryAddTransient<IAccountRepository, AccountRepository>();
         services.TryAddTransient<IServiceRepository, ServiceRepository>();
         services.TryAddTransient<ISubscriptionRepository, SubscriptionRepository>();
+        services.TryAddTransient<ICCPApiService, CCPApiService>();
 
         return services;
     }

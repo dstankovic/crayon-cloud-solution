@@ -5,7 +5,7 @@ namespace CloudSales.Domain.Entities;
 
 public class User : BaseEntity
 {
-    private User() { }
+    protected User() { }
 
     public User(string username, string email, string firstName, string lastName, UserType type, Customer customer)
     {

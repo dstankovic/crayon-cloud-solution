@@ -3,7 +3,7 @@ namespace CloudSales.Domain.Entities;
 
 public class Customer : BaseEntity
 {
-    private Customer() { }
+    protected Customer() { }
 
     public Customer(string name, string email, string phoneNumber)
     {

@@ -4,7 +4,7 @@ namespace CloudSales.Domain.Entities;
 
 public class Account : BaseEntity
 {
-    private Account() { }
+    protected Account() { }
 
     public Account(string name, string description, Customer customer)
     {
@@ -16,6 +16,7 @@ public class Account : BaseEntity
     public string Name { get; private set; }
     public string Description { get; private set; }
 
+    public int CustomerId { get; private set; }
     public virtual Customer Customer { get; set; }
 
     private readonly List<Subscription> _subscriptions = [];

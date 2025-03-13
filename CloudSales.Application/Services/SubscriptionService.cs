@@ -3,37 +3,44 @@ using CloudSales.Application.Models;
 using CloudSales.Domain.Entities;
 using CloudSales.Domain.Enums;
 using CloudSales.Domain.Exceptions;
+using FluentValidation;
 
 namespace CloudSales.Application.Services;
 
 public class SubscriptionService(IAccountRepository accountRepository,
                                  IServiceRepository serviceRepository,
                                  ISubscriptionRepository subscriptionRepository,
-                                 ICCPApiService ccpService) : ISubscriptionService
+                                 ICCPApiService ccpService,
+                                 IValidator<Subscription> subscriptionValidator) : ISubscriptionService
 {
-    public async Task OrderSoftwareLicenseAsync(int accountId, int softwareServiceId, int quantity, DateTime validTo, CancellationToken cancellationToken)
+    public async Task CreateSubscriptionAsync(int customerId, CreateSubscriptionRequestModel request, CancellationToken cancellationToken)
     {
-        var account = await accountRepository.GetAccountAsync(accountId, cancellationToken)
-           ?? throw new EntityNotFoundException(accountId, nameof(Account));
+        var account = await accountRepository.GetAccountAsync(request.AccountId, cancellationToken)
+           ?? throw new EntityNotFoundException(request.AccountId, nameof(Account));
 
-        var softwareService = await serviceRepository.GetServiceAsync(softwareServiceId, cancellationToken)
-           ?? throw new EntityNotFoundException(softwareServiceId, nameof(SoftwareService));
+        if (account.CustomerId != customerId)
+            throw new UnauthorizedException();
+
+        var softwareService = await serviceRepository.GetServiceAsync(request.SoftwareServiceId, cancellationToken)
+           ?? throw new EntityNotFoundException(request.SoftwareServiceId, nameof(SoftwareService));
 
         var subscription = new Subscription(
             softwareService.Name,
-            quantity,
+            request.Quantity,
             SubscriptionState.Pending,
-            validTo,
+            request.ValidTo,
             account,
             softwareService
         );
 
+        await subscriptionValidator.ValidateAndThrowAsync(subscription, cancellationToken);
+
         await subscriptionRepository.SaveAsync(subscription, cancellationToken);
 
         //Replace with real ext id
-        await ccpService.OrderLicenseAsync(new OrderLicenseRequestModel(Guid.NewGuid(), accountId, quantity, validTo), cancellationToken);
+        await ccpService.OrderLicenseAsync(new OrderLicenseRequestModel(Guid.NewGuid(), request.AccountId, request.Quantity, request.ValidTo), cancellationToken);
 
         subscription.UpdateState(SubscriptionState.Active);
-        await subscriptionRepository.SaveAsync(subscription, cancellationToken);
+        await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
     }
 }

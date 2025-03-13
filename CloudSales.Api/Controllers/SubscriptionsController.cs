@@ -1,22 +1,23 @@
 ﻿using CloudSales.Application.Interfaces;
+using CloudSales.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudSales.Api.Controllers
 {
     [ApiController]
     [Route("api/subscription")]
-    public class SubscriptionsController(IAccountRepository accountRepository) : ControllerBase
+    public class SubscriptionsController(ISubscriptionService subscriptionService) : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> GetLicenses(CancellationToken cancellationToken)
+
+        [HttpPost]
+        public async Task<IActionResult> CreateSubscription([FromBody] CreateSubscriptionRequestModel request, CancellationToken cancellationToken)
         {
             // Get the UserId from the current authenticated user
-            //var customerId = GetCustomerIdFromClaims();
             var customerId = 1;
 
-            var accounts = await accountRepository.GetAccountsWithSubscriptionsModelsAsync(customerId, cancellationToken);
+            await subscriptionService.CreateSubscriptionAsync(customerId, request, cancellationToken);
 
-            return Ok(accounts);
+            return Created();
         }
 
     }

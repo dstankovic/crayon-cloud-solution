@@ -8,12 +8,24 @@ namespace CloudSales.Api.Controllers;
 public class AccountsController(IAccountRepository accountRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAccounts(CancellationToken cancellationToken)
     {
         // Get the UserId from the current authenticated user
         var customerId = GetCustomerIdFromClaims();
 
         var accounts = await accountRepository.GetAccountsModelsAsync(customerId, cancellationToken);
+
+        return Ok(accounts);
+    }
+
+    [HttpGet("subscription")]
+    public async Task<IActionResult> GetAccountsWithSubscriptions(CancellationToken cancellationToken)
+    {
+        // Get the UserId from the current authenticated user
+        //var customerId = GetCustomerIdFromClaims();
+        var customerId = 1;
+
+        var accounts = await accountRepository.GetAccountsWithSubscriptionsModelsAsync(customerId, cancellationToken);
 
         return Ok(accounts);
     }

@@ -5,14 +5,14 @@ namespace CloudSales.Domain.Entities;
 
 public class Subscription : BaseAggregatedEntity
 {
-    public Subscription() { }
+    protected Subscription() { }
 
     public Subscription(string name, int quantity, SubscriptionState state, DateTime validTo, Account account, SoftwareService softwareService)
     {
         Name = name;
         Quantity = quantity;
         State = state;
-        ValidTo = validTo;
+        ValidTo = AdjustUTC(validTo);
         Account = account;
         SoftwareService = softwareService;
 
@@ -34,5 +34,12 @@ public class Subscription : BaseAggregatedEntity
     public void UpdateState(SubscriptionState state)
     {
         State = state;
+    }
+
+    private static DateTime AdjustUTC(DateTime dateTime)
+    {
+        return dateTime.Kind == DateTimeKind.Unspecified
+         ? DateTime.SpecifyKind(dateTime, DateTimeKind.Utc)
+         : dateTime.ToUniversalTime();
     }
 }

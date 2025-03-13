@@ -4,7 +4,7 @@ namespace CloudSales.Domain.Entities;
 
 public class SoftwareService : BaseEntity
 {
-    public SoftwareService() { }
+    protected SoftwareService() { }
 
     public SoftwareService(string name, string description, decimal pricePerLicense)
     {
