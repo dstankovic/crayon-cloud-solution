@@ -27,9 +27,19 @@ public class Program
             .AddValidatorsFromAssemblyContaining<CreateSubscriptionRequestModelValidator>()
             .AddFluentValidationAutoValidation();
 
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
         var app = builder.Build();
 
         app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+        app.UseSwagger();
+
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            options.RoutePrefix = string.Empty; // To serve the Swagger UI at the root URL (optional)
+        });
 
         // Configure the HTTP request pipeline.
 
