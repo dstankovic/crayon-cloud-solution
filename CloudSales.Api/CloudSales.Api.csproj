@@ -6,4 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloudSales.Application\CloudSales.Application.csproj" />
+    <ProjectReference Include="..\CloudSales.Domain\CloudSales.Domain.csproj" />
+    <ProjectReference Include="..\CloudSales.Infrastructure\CloudSales.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace CloudSales.Domain.Enums;
 
-internal enum UserType
+public enum UserType
 {
     Regular = 10,
     Admin = 20

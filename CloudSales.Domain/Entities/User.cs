@@ -3,7 +3,7 @@ using CloudSales.Domain.Enums;
 
 namespace CloudSales.Domain.Entities;
 
-internal class User : BaseEntity
+public class User : BaseEntity
 {
     private User() { }
 

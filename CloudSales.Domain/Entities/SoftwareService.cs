@@ -2,7 +2,7 @@
 
 namespace CloudSales.Domain.Entities;
 
-internal class SoftwareService : BaseEntity
+public class SoftwareService : BaseEntity
 {
     public SoftwareService() { }
 

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using CloudSales.Application.Interfaces;
 
 namespace CloudSales.Infrastructure.Extensions;
 public static class DependencyInjectionExtensions
@@ -11,6 +13,8 @@ public static class DependencyInjectionExtensions
         services.AddDbContext<DataContext>((sp, options) => options
             .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
             .UseLazyLoadingProxies());
+
+        services.TryAddTransient<IAccountRepository, AccountRepository>();
 
         return services;
     }

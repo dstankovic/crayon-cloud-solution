@@ -1,7 +1,7 @@
 ﻿using CloudSales.Domain.Common;
 namespace CloudSales.Domain.Entities;
 
-internal class Customer : BaseEntity
+public class Customer : BaseEntity
 {
     private Customer() { }
 
