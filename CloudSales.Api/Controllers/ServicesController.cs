@@ -8,9 +8,9 @@ namespace CloudSales.Api.Controllers
     public class ServicesController(IServiceRepository serviceRepository) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var services = await serviceRepository.GetServicesModelsAsync();
+            var services = await serviceRepository.GetServicesModelsAsync(cancellationToken);
 
             return Ok(services);
         }

@@ -30,4 +30,9 @@ public class Subscription : BaseAggregatedEntity
     public int Quantity { get; private set; }
     public SubscriptionState State { get; private set; }
     public DateTime ValidTo { get; private set; }
+
+    public void UpdateState(SubscriptionState state)
+    {
+        State = state;
+    }
 }
