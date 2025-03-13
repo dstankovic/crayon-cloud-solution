@@ -16,6 +16,7 @@ public static class DependencyInjectionExtensions
 
         services.TryAddTransient<IAccountRepository, AccountRepository>();
         services.TryAddTransient<IServiceRepository, ServiceRepository>();
+        services.TryAddTransient<ISubscriptionRepository, SubscriptionRepository>();
 
         return services;
     }
