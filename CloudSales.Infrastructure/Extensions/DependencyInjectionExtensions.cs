@@ -15,6 +15,7 @@ public static class DependencyInjectionExtensions
             .UseLazyLoadingProxies());
 
         services.TryAddTransient<IAccountRepository, AccountRepository>();
+        services.TryAddTransient<IServiceRepository, ServiceRepository>();
 
         return services;
     }

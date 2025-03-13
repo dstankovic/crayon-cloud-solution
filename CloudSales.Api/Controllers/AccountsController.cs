@@ -18,13 +18,13 @@ public class AccountsController(IAccountRepository accountRepository) : Controll
         return Ok(accounts);
     }
 
-    [HttpGet("/licence")]
-    public async Task<IActionResult> GetLicences()
+    [HttpGet("subscription")]
+    public async Task<IActionResult> GetLicenses()
     {
         // Get the UserId from the current authenticated user
         var customerId = GetCustomerIdFromClaims();
 
-        var accounts = await accountRepository.GetAccountsModelsAsync(customerId);
+        var accounts = await accountRepository.GetAccountsWithSubscriptionsModelsAsync(customerId);
 
         return Ok(accounts);
     }
