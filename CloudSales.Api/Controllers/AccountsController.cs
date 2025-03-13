@@ -7,15 +7,24 @@ namespace CloudSales.Api.Controllers;
 [Route("api/account")]
 public class AccountsController(IAccountRepository accountRepository) : ControllerBase
 {
-    private readonly IAccountRepository _accountRepository = accountRepository;
-
     [HttpGet]
     public async Task<IActionResult> Get()
     {
         // Get the UserId from the current authenticated user
         var customerId = GetCustomerIdFromClaims();
 
-        var accounts = await _accountRepository.GetAccountsModelsForCustomerAsync(customerId);
+        var accounts = await accountRepository.GetAccountsModelsAsync(customerId);
+
+        return Ok(accounts);
+    }
+
+    [HttpGet("/licence")]
+    public async Task<IActionResult> GetLicences()
+    {
+        // Get the UserId from the current authenticated user
+        var customerId = GetCustomerIdFromClaims();
+
+        var accounts = await accountRepository.GetAccountsModelsAsync(customerId);
 
         return Ok(accounts);
     }

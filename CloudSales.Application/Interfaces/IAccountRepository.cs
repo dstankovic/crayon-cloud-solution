@@ -4,6 +4,7 @@ namespace CloudSales.Application.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<IEnumerable<AccountModel>> GetAccountsModelsForCustomerAsync(int customerId);
+        Task<IEnumerable<AccountViewModel>> GetAccountsModelsAsync(int customerId);
+        Task<IEnumerable<AccountWithSubscriptionsViewModel>> GetAccountsWithSubscriptionsModelsAsync(int customerId);
     }
 }
