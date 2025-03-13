@@ -11,8 +11,9 @@ public class Program
         var configuration = builder.Configuration;
 
         // Add services to the container.
-
         builder.Services.AddInfrastructure(configuration);
+        builder.Services.AddApplication(configuration);
+
         builder.Services.AddControllers();
 
         var app = builder.Build();
