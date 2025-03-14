@@ -30,12 +30,12 @@ public static class DependencyInjectionExtensions
             options.UseMicrosoftDependencyInjectionJobFactory();
 
             var jobKey = JobKey.Create(nameof(SyncServicesBackgroundJob));
+            var frequency = int.TryParse(configuration["CronJobs:ServiceSyncServiceIntervalMinutes"], out var value) ? value : 30;
 
             options
                 .AddJob<SyncServicesBackgroundJob>(jobKey)
                 .AddTrigger(trigger => trigger.ForJob(jobKey)
-                                              .WithSimpleSchedule(schedule => schedule.WithIntervalInMinutes(30).RepeatForever()))
-                ;
+                                              .WithSimpleSchedule(schedule => schedule.WithIntervalInMinutes(frequency).RepeatForever()));
         });
 
         services.AddQuartzHostedService(options =>
