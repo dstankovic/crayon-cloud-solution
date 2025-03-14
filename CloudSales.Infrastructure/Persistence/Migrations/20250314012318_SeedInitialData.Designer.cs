@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CloudSales.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250313182559_SeedInitialData")]
+    [Migration("20250314012318_SeedInitialData")]
     partial class SeedInitialData
     {
         /// <inheritdoc />
@@ -106,6 +106,9 @@ namespace CloudSales.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("ExternalId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -118,15 +121,21 @@ namespace CloudSales.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExternalId")
+                        .IsUnique();
+
                     b.ToTable("SoftwareServices");
                 });
 
             modelBuilder.Entity("CloudSales.Domain.Entities.Subscription", b =>
                 {
-                    b.Property<int>("AccountId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("SoftwareServiceId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -139,6 +148,9 @@ namespace CloudSales.Infrastructure.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<int>("SoftwareServiceId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("State")
                         .HasColumnType("integer");
 
@@ -148,9 +160,12 @@ namespace CloudSales.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("ValidTo")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("AccountId", "SoftwareServiceId");
+                    b.HasKey("Id");
 
                     b.HasIndex("SoftwareServiceId");
+
+                    b.HasIndex("AccountId", "SoftwareServiceId", "State")
+                        .IsUnique();
 
                     b.ToTable("Subscriptions");
                 });

@@ -45,7 +45,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
 
     public async Task UpdateQuantityAsync(int customerId, int accountId, int softwareServiceId, int quantity, CancellationToken cancellationToken)
     {
-        var subscription = await GetSubscriptionAndValidateOwnerAsync(subscriptionRepository, customerId, accountId, softwareServiceId, cancellationToken);
+        var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, accountId, softwareServiceId, cancellationToken);
 
         subscription.UpdateQuantity(quantity);
 
@@ -56,7 +56,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
 
     public async Task UpdateExpirationAsync(int customerId, int accountId, int softwareServiceId, DateTime validTo, CancellationToken cancellationToken)
     {
-        var subscription = await GetSubscriptionAndValidateOwnerAsync(subscriptionRepository, customerId, accountId, softwareServiceId, cancellationToken);
+        var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, accountId, softwareServiceId, cancellationToken);
 
         subscription.UpdateExpiration(validTo);
 
@@ -67,7 +67,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
 
     public async Task CancelSubscription(int customerId, int accountId, int softwareServiceId, CancellationToken cancellationToken)
     {
-        var subscription = await GetSubscriptionAndValidateOwnerAsync(subscriptionRepository, customerId, accountId, softwareServiceId, cancellationToken);
+        var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, accountId, softwareServiceId, cancellationToken);
 
         subscription.UpdateState(SubscriptionState.Cancelled);
 
@@ -76,7 +76,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
         await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
     }
 
-    private static async Task<Subscription> GetSubscriptionAndValidateOwnerAsync(ISubscriptionRepository subscriptionRepository, int customerId, int accountId, int softwareServiceId, CancellationToken cancellationToken)
+    private async Task<Subscription> GetSubscriptionAndValidateOwnerAsync(int customerId, int accountId, int softwareServiceId, CancellationToken cancellationToken)
     {
         var subscription = await subscriptionRepository.GetAsync(accountId, softwareServiceId, cancellationToken)
                    ?? throw new EntityNotFoundException("Subscription could not be found.");

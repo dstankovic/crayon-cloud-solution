@@ -3,21 +3,21 @@ using CloudSales.Domain.Enums;
 
 namespace CloudSales.Domain.Entities;
 
-public class Subscription : BaseAggregatedEntity
+public class Subscription : BaseEntity
 {
     protected Subscription() { }
 
     public Subscription(string name, int quantity, SubscriptionState state, DateTime validTo, Account account, SoftwareService softwareService)
     {
         Name = name;
+        Account = account;
+        SoftwareService = softwareService;
+        AccountId = account.Id;
+        SoftwareServiceId = softwareService.Id;
+
         UpdateQuantity(quantity);
         UpdateState(state);
         ValidTo = AdjustUTC(validTo);
-        Account = account;
-        SoftwareService = softwareService;
-
-        AccountId = account.Id;
-        SoftwareServiceId = softwareService.Id;
     }
 
     public int AccountId { get; private set; }

@@ -14,7 +14,12 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Subscription>()
-           .HasKey(s => new { s.AccountId, s.SoftwareServiceId });
+            .HasIndex(s => new { s.AccountId, s.SoftwareServiceId, s.State })
+            .IsUnique();
+
+        modelBuilder.Entity<SoftwareService>()
+            .HasIndex(s => s.ExternalId)
+            .IsUnique();
 
         base.OnModelCreating(modelBuilder);
     }

@@ -1,5 +1,6 @@
 ﻿using CloudSales.Application.Interfaces;
 using CloudSales.Domain.Entities;
+using CloudSales.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudSales.Infrastructure.Persistence;
@@ -13,7 +14,7 @@ internal class SubscriptionRepository(DataContext dataContext) : ISubscriptionRe
 
     public async Task<bool> IsUniqueAsync(int accountId, int softwareServiceId, CancellationToken cancellationToken)
     {
-        return !await dataContext.Subscriptions.AnyAsync(sub => sub.SoftwareServiceId == softwareServiceId && sub.AccountId == accountId, cancellationToken);
+        return !await dataContext.Subscriptions.AnyAsync(sub => sub.SoftwareServiceId == softwareServiceId && sub.AccountId == accountId && sub.State != SubscriptionState.Cancelled, cancellationToken);
     }
 
     public async Task SaveAsync(Subscription subscription, CancellationToken cancellationToken)
