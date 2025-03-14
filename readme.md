@@ -37,9 +37,8 @@ The ServiceSyncService is a hosted background service that runs **every 30 minut
 ## 💻 Running the Application
 
 1.  git clone [https://github.com/dstankovic/crayon-cloud-solution](https://github.com/dstankovic/crayon-cloud-solution)
-2.  cd
-3.  **Configure the connection string** in appsettings.Development.json.
-4.  dotnet run
+2.  **Configure the connection string** in appsettings.Development.json.
+3.  dotnet run
 
 ## ✅ Notes
 
