@@ -12,12 +12,26 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Api\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloudSales.Api\CloudSales.Api.csproj" />
+    <ProjectReference Include="..\CloudSales.Application\CloudSales.Application.csproj" />
+    <ProjectReference Include="..\CloudSales.Domain\CloudSales.Domain.csproj" />
+    <ProjectReference Include="..\CloudSales.Infrastructure\CloudSales.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

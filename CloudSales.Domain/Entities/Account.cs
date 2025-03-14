@@ -17,7 +17,7 @@ public class Account : BaseEntity
     public string Description { get; private set; }
 
     public int CustomerId { get; private set; }
-    public virtual Customer Customer { get; set; }
+    public virtual Customer Customer { get; private set; }
 
     private readonly List<Subscription> _subscriptions = [];
     public virtual IReadOnlyCollection<Subscription> Subscriptions => _subscriptions.AsReadOnly();

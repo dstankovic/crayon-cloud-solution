@@ -33,7 +33,9 @@ public class SubscriptionService(IAccountRepository accountRepository,
             softwareService
         );
 
-        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Create).ThrowOnFailures(), cancellationToken);
+        var result = await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Create), cancellationToken);
+        if (!result.IsValid)
+            throw new ValidationException(result.Errors);
 
         await subscriptionRepository.SaveAsync(subscription, cancellationToken);
 
@@ -47,7 +49,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
     {
         var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, id, cancellationToken);
 
-        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Update).ThrowOnFailures(), cancellationToken);
+        await ValidateAsync(subscription, cancellationToken, Constants.Validation.RuleSets.Create);
 
         subscription.UpdateQuantity(quantity);
 
@@ -60,7 +62,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
     {
         var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, id, cancellationToken);
 
-        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Update).ThrowOnFailures(), cancellationToken);
+        await ValidateAsync(subscription, cancellationToken, Constants.Validation.RuleSets.Update);
 
         subscription.UpdateExpiration(validTo);
 
@@ -72,8 +74,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
     public async Task CancelSubscription(int customerId, int id, CancellationToken cancellationToken)
     {
         var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, id, cancellationToken);
-
-        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Update).ThrowOnFailures(), cancellationToken);
+        await ValidateAsync(subscription, cancellationToken, Constants.Validation.RuleSets.Update);
 
         subscription.Cancel();
 
@@ -82,10 +83,17 @@ public class SubscriptionService(IAccountRepository accountRepository,
         await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
     }
 
+    private async Task ValidateAsync(Subscription subscription, CancellationToken cancellationToken, params string[] rulesets)
+    {
+        var result = await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(rulesets), cancellationToken);
+        if (!result.IsValid)
+            throw new ValidationException(result.Errors);
+    }
+
     private async Task<Subscription> GetSubscriptionAndValidateOwnerAsync(int customerId, int id, CancellationToken cancellationToken)
     {
         var subscription = await subscriptionRepository.GetAsync(id, cancellationToken)
-                   ?? throw new EntityNotFoundException("Subscription could not be found.");
+            ?? throw new EntityNotFoundException(id, nameof(Subscription));
 
         ValidateAccountOwner(customerId, subscription.Account);
         return subscription;
