@@ -22,11 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CloudSales.Api\CloudSales.Api.csproj" />
     <ProjectReference Include="..\CloudSales.Application\CloudSales.Application.csproj" />
     <ProjectReference Include="..\CloudSales.Domain\CloudSales.Domain.csproj" />

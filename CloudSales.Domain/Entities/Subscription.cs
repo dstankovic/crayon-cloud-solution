@@ -53,7 +53,7 @@ public class Subscription : BaseEntity
     public void UpdateExpiration(DateTime validTo)
     {
         if (ValidTo != default && validTo < ValidTo)
-            throw new ArgumentException("Expiration could be just extended.", nameof(validTo));
+            throw new ArgumentException("Expiration can't be reduced.", nameof(validTo));
 
         ValidTo = AdjustUTC(validTo);
     }
