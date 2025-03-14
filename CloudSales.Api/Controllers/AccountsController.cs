@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CloudSales.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CloudSales.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/account")]
 public class AccountsController(IAccountRepository accountRepository, ISubscriptionService subscriptionService) : BaseApiController
