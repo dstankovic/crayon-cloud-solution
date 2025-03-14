@@ -13,8 +13,6 @@ public class Subscription : BaseEntity
         Name = name;
         Account = account;
         SoftwareService = softwareService;
-        AccountId = account.Id;
-        SoftwareServiceId = softwareService.Id;
         State = state;
 
         UpdateQuantity(quantity);

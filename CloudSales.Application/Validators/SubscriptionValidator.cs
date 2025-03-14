@@ -12,8 +12,8 @@ public class SubscriptionValidator : AbstractValidator<Subscription>
     {
         RuleSet(Constants.Validation.RuleSets.Create, () =>
         {
-            RuleFor(x => new { x.SoftwareServiceId, x.AccountId })
-               .MustAsync(async (ids, cancellationToken) => await subscriptionRepository.IsUniqueAsync(ids.AccountId, ids.SoftwareServiceId, cancellationToken))
+            RuleFor(x => new { serviceId = x.SoftwareService.Id, accId = x.Account.Id })
+               .MustAsync(async (ids, cancellationToken) => await subscriptionRepository.IsUniqueAsync(ids.accId, ids.serviceId, cancellationToken))
                .WithMessage("Subscription must be unique. Try to adjust quantity or expiration date.");
         });
 
