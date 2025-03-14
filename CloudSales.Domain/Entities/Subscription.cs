@@ -7,16 +7,17 @@ public class Subscription : BaseEntity
 {
     protected Subscription() { }
 
-    public Subscription(string name, int quantity, SubscriptionState state, DateTime validTo, Account account, SoftwareService softwareService)
+    public Subscription(string name, int quantity, SubscriptionState state, DateTime validTo, Account account, SoftwareService softwareService, Guid? externalId = null)
     {
+        ExternalId = externalId;
         Name = name;
         Account = account;
         SoftwareService = softwareService;
         AccountId = account.Id;
         SoftwareServiceId = softwareService.Id;
+        State = state;
 
         UpdateQuantity(quantity);
-        UpdateState(state);
         ValidTo = AdjustUTC(validTo);
     }
 
@@ -30,10 +31,17 @@ public class Subscription : BaseEntity
     public int Quantity { get; private set; }
     public SubscriptionState State { get; private set; }
     public DateTime ValidTo { get; private set; }
+    public Guid? ExternalId { get; private set; }
 
-    public void UpdateState(SubscriptionState state)
+    public void Activate(Guid externalId)
     {
-        State = state;
+        ExternalId = externalId;
+        State = SubscriptionState.Active;
+    }
+
+    public void Cancel()
+    {
+        State = SubscriptionState.Cancelled;
     }
 
     public void UpdateQuantity(int quantity)

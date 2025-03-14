@@ -26,7 +26,7 @@ internal class AccountRepository(DataContext dataContext) : IAccountRepository
             .Where(acc => acc.Customer.Id == customerId)
             .Select(acc => new AccountWithSubscriptionsViewModel(
                 acc.Name,
-                acc.Subscriptions.Select(sub => new SubscriptionViewModel(sub.Name, sub.Quantity, sub.State, sub.ValidTo))))
+                acc.Subscriptions.Select(sub => new SubscriptionViewModel(sub.Id, sub.Name, sub.Quantity, sub.State, sub.ValidTo))))
             .ToListAsync(cancellationToken);
     }
 }

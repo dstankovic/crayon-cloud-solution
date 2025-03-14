@@ -7,9 +7,9 @@ namespace CloudSales.Infrastructure.Persistence;
 
 internal class SubscriptionRepository(DataContext dataContext) : ISubscriptionRepository
 {
-    public async Task<Subscription?> GetAsync(int accountId, int softwareServiceId, CancellationToken cancellationToken)
+    public async Task<Subscription?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        return await dataContext.Subscriptions.FirstOrDefaultAsync(sub => sub.SoftwareServiceId == softwareServiceId && sub.AccountId == accountId, cancellationToken);
+        return await dataContext.Subscriptions.FirstOrDefaultAsync(sub => sub.Id == id, cancellationToken);
     }
 
     public async Task<bool> IsUniqueAsync(int accountId, int softwareServiceId, CancellationToken cancellationToken)
