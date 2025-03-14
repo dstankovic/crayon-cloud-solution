@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using CloudSales.Application.Interfaces;
 using CloudSales.Infrastructure.Services;
 using CloudSales.Infrastructure.Persistence.Interceptors;
+using Quartz;
+using CloudSales.Infrastructure.Jobs;
 
 namespace CloudSales.Infrastructure.Extensions;
 public static class DependencyInjectionExtensions
@@ -22,6 +24,24 @@ public static class DependencyInjectionExtensions
         services.TryAddTransient<IServiceRepository, ServiceRepository>();
         services.TryAddTransient<ISubscriptionRepository, SubscriptionRepository>();
         services.TryAddTransient<ICCPApiService, CCPApiService>();
+
+        services.AddQuartz(options =>
+        {
+            options.UseMicrosoftDependencyInjectionJobFactory();
+
+            var jobKey = JobKey.Create(nameof(SyncServicesBackgroundJob));
+
+            options
+                .AddJob<SyncServicesBackgroundJob>(jobKey)
+                .AddTrigger(trigger => trigger.ForJob(jobKey)
+                                              .WithSimpleSchedule(schedule => schedule.WithIntervalInMinutes(30).RepeatForever()))
+                ;
+        });
+
+        services.AddQuartzHostedService(options =>
+        {
+            options.WaitForJobsToComplete = true;
+        });
 
         return services;
     }
