@@ -18,8 +18,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
         var account = await accountRepository.GetAccountAsync(request.AccountId, cancellationToken)
            ?? throw new EntityNotFoundException(request.AccountId, nameof(Account));
 
-        if (account.CustomerId != customerId)
-            throw new UnauthorizedException();
+        ValidateAccountOwner(customerId, account);
 
         var softwareService = await serviceRepository.GetServiceAsync(request.SoftwareServiceId, cancellationToken)
            ?? throw new EntityNotFoundException(request.SoftwareServiceId, nameof(SoftwareService));
@@ -42,5 +41,53 @@ public class SubscriptionService(IAccountRepository accountRepository,
 
         subscription.UpdateState(SubscriptionState.Active);
         await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
+    }
+
+    public async Task UpdateQuantityAsync(int customerId, int accountId, int softwareServiceId, int quantity, CancellationToken cancellationToken)
+    {
+        var subscription = await GetSubscriptionAndValidateOwnerAsync(subscriptionRepository, customerId, accountId, softwareServiceId, cancellationToken);
+
+        subscription.UpdateQuantity(quantity);
+
+        await ccpService.UpdateLicenseAsync(new UpdateLicenseRequestModel(Guid.NewGuid(), accountId, quantity, subscription.ValidTo), cancellationToken);
+
+        await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
+    }
+
+    public async Task UpdateExpirationAsync(int customerId, int accountId, int softwareServiceId, DateTime validTo, CancellationToken cancellationToken)
+    {
+        var subscription = await GetSubscriptionAndValidateOwnerAsync(subscriptionRepository, customerId, accountId, softwareServiceId, cancellationToken);
+
+        subscription.UpdateExpiration(validTo);
+
+        await ccpService.UpdateLicenseAsync(new UpdateLicenseRequestModel(Guid.NewGuid(), accountId, subscription.Quantity, validTo), cancellationToken);
+
+        await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
+    }
+
+    public async Task CancelSubscription(int customerId, int accountId, int softwareServiceId, CancellationToken cancellationToken)
+    {
+        var subscription = await GetSubscriptionAndValidateOwnerAsync(subscriptionRepository, customerId, accountId, softwareServiceId, cancellationToken);
+
+        subscription.UpdateState(SubscriptionState.Cancelled);
+
+        await ccpService.CancelLicenseAsync(new CancelLicenseRequestModel(Guid.NewGuid(), accountId), cancellationToken);
+
+        await subscriptionRepository.UpdateAsync(subscription, cancellationToken);
+    }
+
+    private static async Task<Subscription> GetSubscriptionAndValidateOwnerAsync(ISubscriptionRepository subscriptionRepository, int customerId, int accountId, int softwareServiceId, CancellationToken cancellationToken)
+    {
+        var subscription = await subscriptionRepository.GetAsync(accountId, softwareServiceId, cancellationToken)
+                   ?? throw new EntityNotFoundException("Subscription could not be found.");
+
+        ValidateAccountOwner(customerId, subscription.Account);
+        return subscription;
+    }
+
+    private static void ValidateAccountOwner(int customerId, Account account)
+    {
+        if (account.CustomerId != customerId)
+            throw new UnauthorizedException();
     }
 }

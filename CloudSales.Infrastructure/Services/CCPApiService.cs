@@ -5,6 +5,21 @@ namespace CloudSales.Infrastructure.Services
 {
     internal class CCPApiService : ICCPApiService
     {
+        public async Task CancelLicenseAsync(CancelLicenseRequestModel request, CancellationToken cancellationToken)
+        {
+            await Task.Delay(300, cancellationToken);
+        }
+
+        public async Task OrderLicenseAsync(OrderLicenseRequestModel request, CancellationToken cancellationToken)
+        {
+            await Task.Delay(300, cancellationToken);
+        }
+
+        public Task UpdateLicenseAsync(UpdateLicenseRequestModel request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<SoftwareServiceResponseModel>> GetAvailableSoftwareServicesAsync(CancellationToken cancellationToken)
         {
             await Task.Delay(300, cancellationToken);
@@ -12,11 +27,6 @@ namespace CloudSales.Infrastructure.Services
             return Enumerable.Range(0, 50)
                 .Select(i => new SoftwareServiceResponseModel(Guid.Parse($"{i.ToString("D2")}c4e47f-dc59-480a-9147-51bd0334b709"), $"Service Mock {i}", $"Service Mock Description {i}", 100m + 2 * i))
                 .ToList();
-        }
-
-        public async Task OrderLicenseAsync(OrderLicenseRequestModel request, CancellationToken cancellationToken)
-        {
-            await Task.Delay(300, cancellationToken);
         }
     }
 }

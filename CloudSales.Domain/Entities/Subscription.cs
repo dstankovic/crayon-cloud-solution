@@ -10,8 +10,8 @@ public class Subscription : BaseAggregatedEntity
     public Subscription(string name, int quantity, SubscriptionState state, DateTime validTo, Account account, SoftwareService softwareService)
     {
         Name = name;
-        Quantity = quantity;
-        State = state;
+        UpdateQuantity(quantity);
+        UpdateState(state);
         ValidTo = AdjustUTC(validTo);
         Account = account;
         SoftwareService = softwareService;
@@ -34,6 +34,22 @@ public class Subscription : BaseAggregatedEntity
     public void UpdateState(SubscriptionState state)
     {
         State = state;
+    }
+
+    public void UpdateQuantity(int quantity)
+    {
+        if (quantity < 0)
+            throw new ArgumentException("Quantity must not be positive.");
+
+        Quantity = quantity;
+    }
+
+    public void UpdateExpiration(DateTime validTo)
+    {
+        if (ValidTo != default && validTo < ValidTo)
+            throw new ArgumentException("Expiration could be just extended.", nameof(validTo));
+
+        ValidTo = AdjustUTC(validTo);
     }
 
     private static DateTime AdjustUTC(DateTime dateTime)
