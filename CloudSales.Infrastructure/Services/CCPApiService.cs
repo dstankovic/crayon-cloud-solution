@@ -15,9 +15,9 @@ namespace CloudSales.Infrastructure.Services
             await Task.Delay(300, cancellationToken);
         }
 
-        public Task UpdateLicenseAsync(UpdateLicenseRequestModel request, CancellationToken cancellationToken)
+        public async Task UpdateLicenseAsync(UpdateLicenseRequestModel request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await Task.Delay(300, cancellationToken);
         }
 
         public async Task<IEnumerable<SoftwareServiceResponseModel>> GetAvailableSoftwareServicesAsync(CancellationToken cancellationToken)

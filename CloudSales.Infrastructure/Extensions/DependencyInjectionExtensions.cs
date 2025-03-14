@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using CloudSales.Application.Interfaces;
 using CloudSales.Infrastructure.Services;
+using CloudSales.Infrastructure.Persistence.Interceptors;
 
 namespace CloudSales.Infrastructure.Extensions;
 public static class DependencyInjectionExtensions
@@ -13,8 +14,10 @@ public static class DependencyInjectionExtensions
     {
         services.AddDbContext<DataContext>((sp, options) => options
             .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+            .AddInterceptors(sp.GetService<UpdateTimestampInterceptor>()!)
             .UseLazyLoadingProxies());
 
+        services.TryAddTransient<UpdateTimestampInterceptor>();
         services.TryAddTransient<IAccountRepository, AccountRepository>();
         services.TryAddTransient<IServiceRepository, ServiceRepository>();
         services.TryAddTransient<ISubscriptionRepository, SubscriptionRepository>();
