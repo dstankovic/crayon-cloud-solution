@@ -1,5 +1,6 @@
 ﻿using CloudSales.Application.Interfaces;
 using CloudSales.Application.Models;
+using CloudSales.Domain.Common;
 using CloudSales.Domain.Entities;
 using CloudSales.Domain.Enums;
 using CloudSales.Domain.Exceptions;
@@ -32,7 +33,7 @@ public class SubscriptionService(IAccountRepository accountRepository,
             softwareService
         );
 
-        await subscriptionValidator.ValidateAndThrowAsync(subscription, cancellationToken);
+        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Create).ThrowOnFailures(), cancellationToken);
 
         await subscriptionRepository.SaveAsync(subscription, cancellationToken);
 
@@ -47,6 +48,8 @@ public class SubscriptionService(IAccountRepository accountRepository,
     {
         var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, accountId, softwareServiceId, cancellationToken);
 
+        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Update).ThrowOnFailures(), cancellationToken);
+
         subscription.UpdateQuantity(quantity);
 
         await ccpService.UpdateLicenseAsync(new UpdateLicenseRequestModel(Guid.NewGuid(), accountId, quantity, subscription.ValidTo), cancellationToken);
@@ -58,6 +61,8 @@ public class SubscriptionService(IAccountRepository accountRepository,
     {
         var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, accountId, softwareServiceId, cancellationToken);
 
+        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Update).ThrowOnFailures(), cancellationToken);
+
         subscription.UpdateExpiration(validTo);
 
         await ccpService.UpdateLicenseAsync(new UpdateLicenseRequestModel(Guid.NewGuid(), accountId, subscription.Quantity, validTo), cancellationToken);
@@ -68,6 +73,8 @@ public class SubscriptionService(IAccountRepository accountRepository,
     public async Task CancelSubscription(int customerId, int accountId, int softwareServiceId, CancellationToken cancellationToken)
     {
         var subscription = await GetSubscriptionAndValidateOwnerAsync(customerId, accountId, softwareServiceId, cancellationToken);
+
+        await subscriptionValidator.ValidateAsync(subscription, options => options.IncludeRuleSets(Constants.Validation.RuleSets.Update).ThrowOnFailures(), cancellationToken);
 
         subscription.UpdateState(SubscriptionState.Cancelled);
 

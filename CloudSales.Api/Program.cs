@@ -3,7 +3,10 @@ using CloudSales.Api.Validators;
 using CloudSales.Infrastructure.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CloudSales.Api;
 
@@ -20,6 +23,23 @@ public class Program
         builder.Services.AddApplication(configuration);
 
         builder.Services.TryAddSingleton<ErrorFactory>();
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["AuthSettings:Jwt:Issuer"],
+                    ValidAudience = configuration["AuthSettings:Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Jwt:SecretKey"]!))
+                };
+            });
+
+        builder.Services.AddAuthorization();
 
         builder.Services.AddControllers();
 
@@ -38,13 +58,14 @@ public class Program
         app.UseSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            options.RoutePrefix = string.Empty; // To serve the Swagger UI at the root URL (optional)
+            options.RoutePrefix = string.Empty;
         });
 
         // Configure the HTTP request pipeline.
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

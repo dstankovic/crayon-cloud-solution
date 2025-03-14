@@ -1,15 +1,23 @@
-﻿using CloudSales.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace CloudSales.Domain.Common;
 
-namespace CloudSales.Domain.Common
+public static class Constants
 {
-    public static class Constants
+    public static class Validation
     {
+        public static class RuleSets
+        {
+            public const string Create = "Create";
+            public const string Update = "Update";
+        }
+    }
 
+    public static class Auth
+    {
+        public static class Claims
+        {
+            public const string UserId = "userId";
+            public const string CustomerId = "customerId";
+        }
     }
 }
