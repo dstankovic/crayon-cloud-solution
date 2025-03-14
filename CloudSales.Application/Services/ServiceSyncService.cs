@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudSales.Application.Services;
 
-internal class ServiceSyncService(ICCPApiService ccpApiService, ILogger<ServiceSyncService> logger, IServiceRepository serviceRepository) : IServiceSyncService
+public class ServiceSyncService(ICCPApiService ccpApiService, ILogger<ServiceSyncService> logger, IServiceRepository serviceRepository) : IServiceSyncService
 {
     public async Task SyncSoftwareServicesAsync(CancellationToken cancellationToken)
     {
