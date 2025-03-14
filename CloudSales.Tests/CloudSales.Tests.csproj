@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Api\" />
     <Folder Include="Domain\" />
     <Folder Include="Infrastructure\" />
   </ItemGroup>

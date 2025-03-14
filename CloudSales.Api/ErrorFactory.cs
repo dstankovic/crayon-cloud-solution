@@ -6,7 +6,7 @@ namespace CloudSales.Api
 {
     public class ErrorFactory
     {
-        public ErrorResponse GetErrorResponse(Exception exception)
+        public virtual ErrorResponse GetErrorResponse(Exception exception)
         {
             return exception switch
             {
